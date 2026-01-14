@@ -1,7 +1,6 @@
 package com.example.drivebackend.entities;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,11 +10,11 @@ import java.util.Map;
 import java.util.UUID;
 
 @Entity
-@Table(name = "telemetry_samples")
+@Table(name = "telemetry")
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TelemetrySample {
+@NoArgsConstructor
+public class TelemetryEntity {
 
     @Id
     @GeneratedValue
@@ -26,10 +25,6 @@ public class TelemetrySample {
 
     @Column(nullable = false)
     private Instant recordedAt;
-
-    private Double latitude;
-
-    private Double longitude;
 
     @Convert(converter = TelemetryMetricsConverter.class)
     @Column(columnDefinition = "jsonb")

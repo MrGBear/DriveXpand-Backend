@@ -7,8 +7,6 @@ public record TelemetryResponse(
         String id,
         String deviceId,
         Instant recordedAt,
-        Double latitude,
-        Double longitude,
         Map<String, Object> metrics
 ) {
 }

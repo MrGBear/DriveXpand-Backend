@@ -2,7 +2,7 @@ package com.example.drivebackend.services.impl;
 
 import com.example.drivebackend.dto.TelemetryIngestRequest;
 import com.example.drivebackend.dto.TelemetryResponse;
-import com.example.drivebackend.entities.TelemetrySample;
+import com.example.drivebackend.entities.TelemetryEntity;
 import com.example.drivebackend.mapper.TelemetryMapper;
 import com.example.drivebackend.repository.TelemetrySampleRepository;
 import com.example.drivebackend.services.TelemetryService;
@@ -27,7 +27,7 @@ public class TelemetryServiceImpl implements TelemetryService {
     @Override
     @Transactional
     public TelemetryResponse ingestTelemetry(TelemetryIngestRequest request) {
-        TelemetrySample sample = telemetryMapper.toEntity(request);
+        TelemetryEntity sample = telemetryMapper.toEntity(request);
         telemetrySampleRepository.save(sample);
         log.debug("Stored telemetry sample for device {}", request.deviceId());
         return telemetryMapper.toDto(sample);

@@ -9,9 +9,9 @@ import java.util.Map;
 public record TelemetryIngestRequest(
         @NotBlank String deviceId,
         @NotNull Instant recordedAt,
-        Double latitude,
-        Double longitude,
-        Map<String, Object> metrics
-) {
+        Map<String, Object> aggregation,
+        Map<String, Object> metrics,
+        Map<String, Object> errors
+        ) {
 }
 
