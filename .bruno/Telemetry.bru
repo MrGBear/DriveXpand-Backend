@@ -5,9 +5,15 @@ meta {
 }
 
 post {
-  url: http://localhost:8080/api/telemetry
+  url: {{host}}/api/telemetry
   body: json
-  auth: inherit
+  auth: apikey
+}
+
+auth:apikey {
+  key: X-API-KEY
+  value: {{api-key}}
+  placement: header
 }
 
 body:json {
