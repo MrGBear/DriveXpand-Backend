@@ -1,6 +1,6 @@
 package com.example.drivebackend.dto;
 
-import tools.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 import java.time.Instant;
 import java.util.UUID;
 
