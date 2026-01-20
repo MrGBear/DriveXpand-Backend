@@ -12,6 +12,5 @@ public interface TelemetryMapper {
     @Mapping(target = "id", ignore = true)
     TelemetryEntity toEntity(TelemetryIngestRequest request);
 
-    TelemetryResponse toDto(TelemetryEntity sample);
+    TelemetryResponse toDto(TelemetryEntity entity);
 }
-

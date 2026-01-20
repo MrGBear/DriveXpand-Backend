@@ -1,17 +1,19 @@
 package com.example.drivebackend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import tools.jackson.databind.JsonNode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;
-import java.util.Map;
 
 public record TelemetryIngestRequest(
         @NotBlank String deviceId,
         @NotNull Instant recordedAt,
-        Map<String, Object> aggregation,
-        Map<String, Object> metrics,
-        Map<String, Object> errors
-        ) {
+        @JsonProperty("start_time") Long startTime,
+        @JsonProperty("end_time") Long endTime,
+        @JsonProperty("aggregated_data") JsonNode aggregatedData,
+        JsonNode metrics
+) {
 }
 

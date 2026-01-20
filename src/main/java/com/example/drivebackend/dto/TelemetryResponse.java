@@ -1,13 +1,17 @@
 package com.example.drivebackend.dto;
 
+import tools.jackson.databind.JsonNode;
 import java.time.Instant;
-import java.util.Map;
+import java.util.UUID;
 
 public record TelemetryResponse(
-        String id,
+        UUID id,
         String deviceId,
         Instant recordedAt,
-        Map<String, Object> metrics
+        Long startTime,
+        Long endTime,
+        JsonNode aggregatedData,
+        JsonNode metrics
 ) {
 }
 
