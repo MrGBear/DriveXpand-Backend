@@ -18,7 +18,7 @@ tags:
 
 paths:
 
-  /api/v1/devices:
+  /api/devices:
     get:
       tags: [Devices]
       summary: Liste verfügbarer OBD2-Geräte
@@ -33,7 +33,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Device'
 
-  /api/v1/vehicle/{id}/stats:
+  /api/vehicle/{id}/stats:
     get:
       tags: [Statistics]
       summary: Fahrzeug-Statistiken
@@ -57,7 +57,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/VehicleStats'
 
-  /api/v1/vehicle/{id}/analysis:
+  /api/vehicle/{id}/analysis:
     get:
       tags: [Analysis]
       summary: Fahranalyse
@@ -75,7 +75,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/VehicleAnalysis'
 
-  /api/v1/vehicle/{id}/achievements: # Optional für später 
+  /api/vehicle/{id}/achievements: # Optional für später 
     get:
       tags: [Achievements]
       summary: Achievements eines Fahrzeugs
@@ -95,7 +95,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Achievement'
 
-  /api/v1/vehicle/{id}/trips:
+  /api/vehicle/{id}/trips:
     get:
       tags: [Trips]
       summary: Letzte Fahrten

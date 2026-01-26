@@ -1,10 +1,10 @@
 package com.example.drivebackend.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 import java.time.Instant;
 import java.util.Map;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record TelemetryIngestRequest(
         @NotBlank String deviceId,
