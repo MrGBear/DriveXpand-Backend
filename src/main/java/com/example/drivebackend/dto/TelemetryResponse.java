@@ -6,8 +6,8 @@ import java.util.Map;
 public record TelemetryResponse(
         String id,
         String deviceId,
-        Instant recordedAt,
-        Map<String, Object> metrics
+        Instant start_time,
+        Map<String, Object> timed_data
 ) {
 }
 

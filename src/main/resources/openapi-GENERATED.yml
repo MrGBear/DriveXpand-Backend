@@ -90,7 +90,7 @@ components:
       properties:
         deviceId:
           type: string
-        recordedAt:
+        start_time:
           type: string
           format: date-time
         aggregation:
@@ -107,7 +107,7 @@ components:
             type: object
       required:
       - deviceId
-      - recordedAt
+      - start_time
     TelemetryResponse:
       type: object
       properties:
@@ -115,7 +115,7 @@ components:
           type: string
         deviceId:
           type: string
-        recordedAt:
+        start_time:
           type: string
           format: date-time
         metrics:

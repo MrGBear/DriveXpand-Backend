@@ -8,9 +8,10 @@ import jakarta.validation.constraints.NotNull;
 
 public record TelemetryIngestRequest(
         @NotBlank String deviceId,
-        @NotNull Instant recordedAt,
-        Map<String, Object> aggregation,
-        Map<String, Object> metrics,
+        @NotNull Instant start_time,
+        Instant end_time,
+        Map<String, Object> aggregated_data,
+        Map<String, Object> timed_data,
         Map<String, Object> errors
         ) {
 }

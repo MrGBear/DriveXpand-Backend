@@ -31,11 +31,11 @@ public class TelemetryEntity {
     @JoinColumn(name = "device_id", referencedColumnName = "deviceId", nullable = false)
     private DeviceEntity device;
 
-    @Column(nullable = false)
-    private Instant recordedAt;
+    @Column(name="start_time", nullable = false)
+    private Instant startTime;
 
     @Convert(converter = TelemetryMetricsConverter.class)
-    @Column(columnDefinition = "jsonb")
-    private Map<String, Object> metrics;
+    @Column(columnDefinition = "TEXT") // 'text' statt 'jsonb' für H2-Kompatibilität
+    private Map<String, Object> timed_data;
 }
 

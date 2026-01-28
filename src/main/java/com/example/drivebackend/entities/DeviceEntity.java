@@ -19,5 +19,5 @@ public class DeviceEntity {
     private String deviceId; // gleiche deviceId wie in TelemetryEntity
 
     @Column(nullable = false)
-    private String name = "Unbenanntes Gerät"; // Default-Wert
+    private String name = "Porsche 911 Carrera 4 GTS"; // Default-Wert
 }
