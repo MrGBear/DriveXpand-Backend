@@ -1,13 +1,20 @@
 package com.example.drivebackend.entities;
 
-import jakarta.persistence.*;
+import java.time.Instant;
+import java.util.Map;
+import java.util.UUID;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-import java.util.Map;
-import java.util.UUID;
 
 @Entity
 @Table(name = "telemetry")
@@ -20,16 +27,17 @@ public class TelemetryEntity {
     @GeneratedValue
     private UUID id;
 
-    //TODO : Add relation to DeviceEntity
-    @Column(nullable = false)
-    private String deviceId;
+    @ManyToOne
+    @JoinColumn(name = "device_id", referencedColumnName = "deviceId", nullable = false)
+    private DeviceEntity device;
 
-    private Long startTime;
-    private Long endTime;
+    @Column(name="start_time", nullable = false)
+    private Instant startTime;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
-    private Map<String, Object> aggregatedData;
+    @Convert(converter = TelemetryMetricsConverter.class)
+    @Column(columnDefinition = "TEXT") // 'text' statt 'jsonb' für H2-Kompatibilität
+    private Map<String, Object> timed_data;
+}
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")

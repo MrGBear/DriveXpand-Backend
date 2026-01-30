@@ -6,10 +6,8 @@ import java.util.UUID;
 public record TelemetryResponse(
         UUID id,
         String deviceId,
-        Long startTime,
-        Long endTime,
-        Map<String, Object> aggregatedData,
-        Map<String, Object> metrics
+        Instant start_time,
+        Map<String, Object> timed_data
 ) {
 }
 
