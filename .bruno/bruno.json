@@ -6,10 +6,10 @@
     "node_modules",
     ".git"
   ],
-  "size": 0.0012311935424804688,
-  "filesCount": 6,
+  "size": 0.0014181137084960938,
+  "filesCount": 7,
   "proxy": {
-    "enabled": false,
+    "enabled": true,
     "protocol": "http",
     "hostname": "{{proxy}}",
     "port": 8080,
@@ -18,6 +18,6 @@
       "username": "",
       "password": ""
     },
-    "bypassProxy": ""
+    "bypassProxy": "localhost,127.0.0.1"
   }
 }

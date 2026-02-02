@@ -9,7 +9,7 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=localsecret
     ports:
-      - "5432:5432"
+      - "5433:5432"
 
   # Local App (Builds from source)
   app:
