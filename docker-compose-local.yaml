@@ -13,9 +13,13 @@ services:
 
   # Local App (Builds from source)
   app:
-    build:
-      context: .
+    image: eclipse-temurin:21-jdk-jammy
     container_name: local_spring_boot
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ~/.m2:/root/.m2
+    command: /bin/sh -c "chmod +x mvnw && ./mvnw clean package -DskipTests && java -jar target/*.jar"
     depends_on:
       - db
     environment:
@@ -33,7 +37,7 @@ services:
       # API Key for testing
       - API_KEY_VALUE=my-local-test-key
       - LOGGING_LEVEL_ROOT=INFO
-      - LOGGING_LEVEL_ORG_HIBERNATE=DEBUG
-      - LOGGING_LEVEL_ORG_HIBERNATE_SQL=DEBUG
+      - LOGGING_LEVEL_ORG_HIBERNATE=INFO
+      - LOGGING_LEVEL_ORG_HIBERNATE_SQL=INFO
     ports:
       - "8080:8080"
