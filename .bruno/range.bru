@@ -1,11 +1,11 @@
 meta {
-  name: range
+  name: trips
   type: http
   seq: 5
 }
 
 get {
-  url: {{host}}/api/telemetry/range?deviceId=TEST_SIM_01&since=1996-01-28T16:39:02Z&end=1997-01-31T22:19:53Z
+  url: {{host}}/api/telemetry/trips?deviceId=TEST_SIM_01&since=1996-01-28T16:39:02Z&end=1997-01-31T22:19:53Z
   body: none
   auth: inherit
 }

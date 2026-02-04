@@ -7,6 +7,7 @@ import java.util.UUID;
 public record TelemetryResponse(
         UUID id,
         String deviceId,
+        UUID tripId,
         Instant start_time,
         Map<String, Object> timed_data,
         Map<String, Object> aggregated_data

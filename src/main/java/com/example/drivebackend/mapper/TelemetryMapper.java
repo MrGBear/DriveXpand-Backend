@@ -12,10 +12,12 @@ public interface TelemetryMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "device", ignore = true)
+    @Mapping(target = "trip", ignore = true)
     @Mapping(source = "start_time", target = "startTime")
     TelemetryEntity toEntity(TelemetryIngestRequest request);
     
     @Mapping(source = "device.deviceId", target = "deviceId")
+    @Mapping(source = "trip.id", target = "tripId")
     @Mapping(source = "startTime", target = "start_time")
     TelemetryResponse toDto(TelemetryEntity sample);
 }

@@ -31,6 +31,10 @@ public class TelemetryEntity {
     @JoinColumn(name = "device_id", referencedColumnName = "deviceId", nullable = false)
     private DeviceEntity device;
 
+    @ManyToOne
+    @JoinColumn(name = "trip_id", referencedColumnName = "id")
+    private TripEntity trip;
+
     @Column(name="start_time", nullable = false)
     private Instant startTime;
 

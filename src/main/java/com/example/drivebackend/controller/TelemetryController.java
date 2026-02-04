@@ -7,6 +7,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,15 +46,26 @@ public class TelemetryController {
         return latest.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/range")
-    public ResponseEntity<Map<Instant, List<TelemetryResponse>>> fetchTelemetryGroupedByDrive(
+    @GetMapping("/trips")
+    public ResponseEntity<Map<UUID, List<TelemetryResponse>>> fetchTelemetryGroupedByTrip(
             @RequestParam("deviceId") String deviceId,
             @RequestParam("since") Instant since,
             @RequestParam("end") Instant end,
-            @RequestParam(value = "timeBetweenDrivesInSeconds", defaultValue = "600") int timeBetweenDrivesInSeconds
+            @RequestParam(value = "timeBetweenTripsInSeconds", defaultValue = "1800") int timeBetweenTripsInSeconds
     ) {
-        Map<Instant, List<TelemetryResponse>> telemetryMap = telemetryService.fetchTelemetryGroupedByDrive(deviceId, since, end, timeBetweenDrivesInSeconds);
-        return ResponseEntity.ok(telemetryMap);
+        Map<UUID, List<TelemetryResponse>> tripMap = telemetryService.fetchTelemetryGroupedByTrip(deviceId, since, end, timeBetweenTripsInSeconds);
+        return ResponseEntity.ok(tripMap);
+    }
+
+    @GetMapping("/range")
+    public ResponseEntity<Map<UUID, List<TelemetryResponse>>> fetchTelemetryGroupedByRange(
+            @RequestParam("deviceId") String deviceId,
+            @RequestParam("since") Instant since,
+            @RequestParam("end") Instant end,
+            @RequestParam(value = "timeBetweenTripsInSeconds", defaultValue = "1800") int timeBetweenTripsInSeconds
+    ) {
+        Map<UUID, List<TelemetryResponse>> tripMap = telemetryService.fetchTelemetryGroupedByTrip(deviceId, since, end, timeBetweenTripsInSeconds);
+        return ResponseEntity.ok(tripMap);
     }
 
     @GetMapping("/trips-per-weekday")
@@ -61,13 +73,16 @@ public class TelemetryController {
         @RequestParam("deviceId") String deviceId,
         @RequestParam("since") Instant since,
         @RequestParam("end") Instant end,
-        @RequestParam(value = "timeBetweenDrivesInSeconds", defaultValue = "600") int timeBetweenDrivesInSeconds
+        @RequestParam(value = "timeBetweenTripsInSeconds", defaultValue = "1800") int timeBetweenTripsInSeconds
         ) {
-    Map<Instant, ?> trips = telemetryService.fetchTelemetryGroupedByDrive(deviceId, since, end, timeBetweenDrivesInSeconds);
+    Map<UUID, List<TelemetryResponse>> trips = telemetryService.fetchTelemetryGroupedByTrip(deviceId, since, end, timeBetweenTripsInSeconds);
 
     Map<DayOfWeek, Integer> result = new EnumMap<>(DayOfWeek.class);
-    for (Instant tripStart : trips.keySet()) {
-        DayOfWeek day = tripStart.atZone(ZoneOffset.UTC).getDayOfWeek();
+    for (List<TelemetryResponse> trip : trips.values()) {
+        if (trip.isEmpty()) {
+            continue;
+        }
+        DayOfWeek day = trip.get(0).start_time().atZone(ZoneOffset.UTC).getDayOfWeek();
         result.put(day, result.getOrDefault(day, 0) + 1);
     }
     return ResponseEntity.ok(result);
@@ -78,10 +93,9 @@ public class TelemetryController {
         @RequestParam("deviceId") String deviceId,
         @RequestParam("since") Instant since,
         @RequestParam("end") Instant end,
-        @RequestParam(value = "timeBetweenDrivesInSeconds", defaultValue = "600") int timeBetweenDrivesInSeconds
+        @RequestParam(value = "timeBetweenTripsInSeconds", defaultValue = "1800") int timeBetweenTripsInSeconds
     ) {
-    // Hole alle Fahrten gruppiert nach Trip-Start
-    Map<Instant, List<TelemetryResponse>> trips = telemetryService.fetchTelemetryGroupedByDrive(deviceId, since, end, timeBetweenDrivesInSeconds);
+    Map<UUID, List<TelemetryResponse>> trips = telemetryService.fetchTelemetryGroupedByTrip(deviceId, since, end, timeBetweenTripsInSeconds);
 
     double totalMeter = 0.0;
     double totalSpeed = 0.0;
@@ -130,4 +144,3 @@ public class TelemetryController {
     return ResponseEntity.ok(result);
     }
 }
-

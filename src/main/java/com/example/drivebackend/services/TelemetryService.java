@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface TelemetryService {
 
@@ -16,8 +17,6 @@ public interface TelemetryService {
 
     List<TelemetryResponse> fetchTelemetryInRange(String deviceId, Instant since, Instant end);
 
-    // Map für alle Fahrten in gegebenen Zeitraum. Wenn für 10 min seit dem letzten TelemetryEntity kein neues gefunden wird, wird eine neue Fahrt in der map angelegt
-    // Der key ist der Startzeitpunkt der Fahrt als Instant
-    Map<Instant, List<TelemetryResponse>> fetchTelemetryGroupedByDrive(String deviceId, Instant since, Instant end, int timeBetweenDrivesInSeconds);
+    // Map für alle Fahrten in gegebenen Zeitraum. Der key ist die Fahrt-ID
+    Map<UUID, List<TelemetryResponse>> fetchTelemetryGroupedByTrip(String deviceId, Instant since, Instant end, int timeBetweenTripsInSeconds);
 }
-
