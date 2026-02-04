@@ -2,6 +2,7 @@ package com.example.drivebackend.services;
 
 import com.example.drivebackend.dto.TelemetryIngestRequest;
 import com.example.drivebackend.dto.TelemetryResponse;
+import com.example.drivebackend.dto.TripDetailsResponse;
 
 import java.time.Instant;
 import java.util.List;
@@ -21,4 +22,6 @@ public interface TelemetryService {
 
     // Map für alle Fahrten in gegebenen Zeitraum. Der key ist die Fahrt-ID
     Map<UUID, List<TelemetryResponse>> fetchTelemetryGroupedByTrip(String deviceId, Instant since, Instant end, int timeBetweenTripsInSeconds);
+
+    Map<UUID, TripDetailsResponse> fetchTripDetails(String deviceId, Instant since, Instant end, int timeBetweenTripsInSeconds);
 }

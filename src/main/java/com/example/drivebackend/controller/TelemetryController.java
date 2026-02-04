@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.drivebackend.dto.TelemetryIngestRequest;
 import com.example.drivebackend.dto.TelemetryResponse;
+import com.example.drivebackend.dto.TripDetailsResponse;
 import com.example.drivebackend.services.TelemetryService;
 
 import jakarta.validation.Valid;
@@ -62,8 +63,8 @@ public class TelemetryController {
     @GetMapping("/trips-per-weekday")
     public ResponseEntity<Map<DayOfWeek, Integer>> getTripsPerWeekday(
         @RequestParam("deviceId") String deviceId,
-        @RequestParam("since") Instant since,
-        @RequestParam("end") Instant end,
+        @RequestParam(value = "since", required = false) Instant since,
+        @RequestParam(value = "end", required = false) Instant end,
         @RequestParam(value = "timeBetweenTripsInSeconds", defaultValue = "1800") int timeBetweenTripsInSeconds
         ) {
     Map<UUID, List<TelemetryResponse>> trips = telemetryService.fetchTelemetryGroupedByTrip(deviceId, since, end, timeBetweenTripsInSeconds);
@@ -136,13 +137,13 @@ public class TelemetryController {
     }
 
     @GetMapping("/trips")
-    public ResponseEntity<Map<UUID, List<TelemetryResponse>>> fetchTelemetryGroupedByTrip(
+    public ResponseEntity<Map<UUID, TripDetailsResponse>> fetchTelemetryGroupedByTrip(
             @RequestParam("deviceId") String deviceId,
             @RequestParam(value = "since", required = false) Instant since,
             @RequestParam(value = "end", required = false) Instant end,
             @RequestParam(value = "timeBetweenTripsInSeconds", defaultValue = "1800") int timeBetweenTripsInSeconds
     ) {
-        Map<UUID, List<TelemetryResponse>> tripMap = telemetryService.fetchTelemetryGroupedByTrip(deviceId, since, end, timeBetweenTripsInSeconds);
+        Map<UUID, TripDetailsResponse> tripMap = telemetryService.fetchTripDetails(deviceId, since, end, timeBetweenTripsInSeconds);
         return ResponseEntity.ok(tripMap);
     }
 }

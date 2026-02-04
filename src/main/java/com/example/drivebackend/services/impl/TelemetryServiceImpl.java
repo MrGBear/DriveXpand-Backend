@@ -3,11 +3,13 @@ package com.example.drivebackend.services.impl;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.drivebackend.dto.TelemetryIngestRequest;
 import com.example.drivebackend.dto.TelemetryResponse;
+import com.example.drivebackend.dto.TripDetailsResponse;
 import com.example.drivebackend.entities.DeviceEntity;
 import com.example.drivebackend.entities.TelemetryEntity;
 import com.example.drivebackend.entities.TripEntity;
@@ -120,6 +123,46 @@ public class TelemetryServiceImpl implements TelemetryService {
         }
 
         return aggregatedDrivesMap;
+    }
+
+    @Override
+    public Map<UUID, TripDetailsResponse> fetchTripDetails(String deviceId, Instant since, Instant end, int timeBetweenTripsInSeconds) {
+        Map<UUID, List<TelemetryResponse>> grouped = fetchTelemetryGroupedByTrip(deviceId, since, end, timeBetweenTripsInSeconds);
+        Map<UUID, TripEntity> tripEntities = tripRepository.findAllById(grouped.keySet())
+                .stream()
+                .collect(Collectors.toMap(TripEntity::getId, trip -> trip));
+
+        Map<UUID, TripDetailsResponse> result = new LinkedHashMap<>();
+        for (Map.Entry<UUID, List<TelemetryResponse>> entry : grouped.entrySet()) {
+            UUID tripId = entry.getKey();
+            List<TelemetryResponse> samples = entry.getValue();
+            TripEntity trip = tripEntities.get(tripId);
+
+            List<Map<String, Object>> timedData = new ArrayList<>();
+            List<Map<String, Object>> aggregatedData = new ArrayList<>();
+            for (TelemetryResponse response : samples) {
+                if (response.timed_data() != null) {
+                    timedData.add(new HashMap<>(response.timed_data()));
+                }
+                if (response.aggregated_data() != null) {
+                    aggregatedData.add(new HashMap<>(response.aggregated_data()));
+                }
+            }
+
+            TripDetailsResponse tripDetails = new TripDetailsResponse(
+                    tripId,
+                    trip != null ? trip.getDevice().getDeviceId() : deviceId,
+                    trip != null ? trip.getStartTime() : null,
+                    trip != null ? trip.getEndTime() : null,
+                    trip != null ? trip.getStartLocation() : null,
+                    trip != null ? trip.getEndLocation() : null,
+                    timedData,
+                    aggregatedData
+            );
+            result.put(tripId, tripDetails);
+        }
+
+        return result;
     }
 
     private TripEntity resolveTrip(DeviceEntity device, Instant currentStartTime) {
