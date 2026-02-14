@@ -60,7 +60,17 @@ public class TelemetryServiceImpl implements TelemetryService {
         sample.setTrip(trip);
         telemetrySampleRepository.save(sample);
 
-        updateTripEndTime(trip, sample.getEndTime() != null ? sample.getEndTime() : sample.getStartTime());
+        trip = updateTripEndTime(trip, sample.getEndTime() != null ? sample.getEndTime() : sample.getStartTime());
+
+        // update trip values
+        Float sampleDistance = Float.valueOf(sample.getAggregated_data().get("distance").toString()) / 1000;
+        Float tripDistance = trip.getTrip_distance_km() != null ? trip.getTrip_distance_km() : 0;
+        trip.setTrip_distance_km(tripDistance + sampleDistance);
+
+        Integer count = trip.getTelemetry_count() != null ? trip.getTelemetry_count() : 0;
+        trip.setTelemetry_count(count + 1);
+
+        tripRepository.save(trip);
 
         log.debug("Stored telemetry sample for device {}", request.deviceId());
         return telemetryMapper.toDto(sample);
@@ -157,7 +167,8 @@ public class TelemetryServiceImpl implements TelemetryService {
                     trip != null ? trip.getStartLocation() : null,
                     trip != null ? trip.getEndLocation() : null,
                     timedData,
-                    aggregatedData
+                    aggregatedData,
+                    trip != null ? trip.getTrip_distance_km() : null
             );
             result.put(tripId, tripDetails);
         }
@@ -185,11 +196,14 @@ public class TelemetryServiceImpl implements TelemetryService {
         return tripRepository.save(trip);
     }
 
-    private void updateTripEndTime(TripEntity trip, Instant currentStartTime) {
+    private TripEntity updateTripEndTime(TripEntity trip, Instant currentStartTime) {
         Instant endTime = trip.getEndTime();
         if (endTime == null || currentStartTime.isAfter(endTime)) {
             trip.setEndTime(currentStartTime);
-            tripRepository.save(trip);
+            trip = tripRepository.save(trip);
+        } else {
+            trip = tripRepository.save(trip);
         }
+        return trip;
     }
 }

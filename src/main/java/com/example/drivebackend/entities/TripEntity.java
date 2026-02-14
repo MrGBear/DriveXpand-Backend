@@ -42,4 +42,10 @@ public class TripEntity {
 
     @Column(name = "end_location")
     private String endLocation;
+
+    @Column(name = "trip_distance_km")
+    private Float trip_distance_km;
+
+    @Column(name = "telemetry_count")
+    private Integer telemetry_count;
 }

@@ -9,6 +9,7 @@ public record TripResponse(
         Instant startTime,
         Instant endTime,
         String startLocation,
-        String endLocation
+        String endLocation,
+        Float trip_distance_km
 ) {
 }

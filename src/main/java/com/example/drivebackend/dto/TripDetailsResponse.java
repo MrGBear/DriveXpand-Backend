@@ -13,6 +13,7 @@ public record TripDetailsResponse(
         String startLocation,
         String endLocation,
         List<Map<String, Object>> timed_data,
-        List<Map<String, Object>> aggregated_data
+        List<Map<String, Object>> aggregated_data,
+        Float trip_distance_km
 ) {
 }

@@ -131,7 +131,8 @@ public class TripController {
             trip.getStartLocation(),
             trip.getEndLocation(),
             timed_data,
-            aggregated_data
+            aggregated_data,
+            trip.getTrip_distance_km()
         );
 
         return ResponseEntity.ok(tripDetails);
@@ -191,7 +192,8 @@ public class TripController {
                 trip.getStartTime(),
                 trip.getEndTime(),
                 trip.getStartLocation(),
-                trip.getEndLocation()
+                trip.getEndLocation(),
+                trip.getTrip_distance_km()
         );
     }
 }
