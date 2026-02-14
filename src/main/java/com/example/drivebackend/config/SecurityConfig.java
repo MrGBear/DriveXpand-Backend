@@ -56,8 +56,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Allow all origins for dev
-        configuration.setAllowedOriginPatterns(List.of("*")); 
+        // Allow localhost for dev
+        configuration.setAllowedOriginPatterns(List.of("http://localhost*", "https://drivexpand.rehr.cloud")); 
         
         // Explicitly allow all methods, crucially OPTIONS and PUT
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")); 
